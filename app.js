@@ -5,7 +5,7 @@ let msgContainer = document.querySelector(".msg-container");
 let msg = document.querySelector("#msg");
 
 let turnO = true; // playerO , playerX
-
+let count = 0;
 const winPatterns = [
     [0,1,2],
     [0,3,6],
@@ -19,6 +19,7 @@ const winPatterns = [
 
 const resetGame = () => {
     let turnO = true;
+    count = 0;
     enableBoxes();
     msgContainer.classList.add("hide");
 };
@@ -28,16 +29,24 @@ boxes.forEach((box)=>{
         console.log("box was clicked");
         if(turnO){  
             //playerO
-            box.innerText = "O";
+            box.innerHTML = "<div style = 'color:#dc509d'>0</div>";
             turnO = false;
-        }else{      
+        }
+        else{      
             //playerX
-            box.innerText = "X";
+            // box.innerText = "X";
+            box.innerHTML = "<div style = 'color:blue'>X</div>";
             turnO = true;
         }
         box.disabled = true;
 
-        checkWinner();
+        count ++;
+        let isWinner = checkWinner();
+        
+        if (count === 9 && !isWinner)
+        {
+            gameDraw();
+        }
     });
 });
 
@@ -54,6 +63,12 @@ const enableBoxes = () =>{
     }
 }
 
+const gamedraw = () => {
+    msg.innerText = "Game is Draw";
+    msgContainer.classList.remove("hide");
+    disableBoxes();
+}
+
 const showWinner = (winner) => {
     msg.innerText = `Congratulations, Winner is ${winner}`;
     msgContainer.classList.remove("hide");
@@ -68,7 +83,7 @@ const checkWinner = () => {
 
         if (pos1Val != "" && pos2Val != "" && pos3Val != ""){
             if(pos1Val === pos2Val && pos2Val === pos3Val){
-                console.log("winner",pos1Val);
+                // console.log("winner",pos1Val);
                 showWinner(pos1Val);
             }
         }
